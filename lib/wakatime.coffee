@@ -417,7 +417,29 @@ sendHeartbeat = (file, lineno, isWrite) ->
     args.push('--config')
     args.push(path.join getWakatimeHome(), '.wakatime.cfg')
 
-    if atom.project.contains(currentFile)
+    fileMap = [
+      "\\VIC\\departments\\salesmarketing\\accountanalysis\\",
+      "\\VIC\\departments\\salesmarketing\\",
+      "\\VIC\\departments\\",
+      "\\vixen\\src\\web_components\\"
+      "\\vixen\\src\\"
+    ]
+    project = null
+
+    if fileMap
+      for folder in fileMap
+        idx = currentFile.indexOf(folder)
+        if idx > -1
+          potentialProject = currentFile
+            .substring(idx + folder.length)
+            .replace(/^[\\/]+/, "")
+          if potentialProject.match(/[\\/]/)
+            project = potentialProject.replace(/^([^\\/]+).*$/, "$1")
+            args.push('--project')
+            args.push(project)
+            break
+
+    if !project && atom.project.contains(currentFile)
       for rootDir in atom.project.rootDirectories
         realPath = rootDir.realPath
         if currentFile.indexOf(realPath) > -1

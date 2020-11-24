@@ -3,3 +3,5 @@ npm-debug.log
 node_modules
 *.msi
 wakatime-master
+wakatime-cli
+last-checked-for-updates
